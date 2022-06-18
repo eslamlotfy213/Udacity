@@ -85,8 +85,6 @@ public class ActionHandler implements ActionListener {
                 newInvODialogCancel();
                 break;
 
-                
-                
             case "newLineOK":
                 newLineDialogOK();
                 break;
@@ -110,9 +108,9 @@ public class ActionHandler implements ActionListener {
 
     private void savefile() {
         ArrayList<invoiceHeader> invoicesArraySaves = frame.getInvoiceArray();
+              JOptionPane.showMessageDialog(frame, "Please, select file to save header data!", "Attension", JOptionPane.WARNING_MESSAGE);
         JFileChooser fc = new JFileChooser();
         try {
-
             int buttonresult = fc.showSaveDialog(frame);
             if (buttonresult == JFileChooser.APPROVE_OPTION) {
                 File headerFile = fc.getSelectedFile();
@@ -127,6 +125,7 @@ public class ActionHandler implements ActionListener {
                         linesStr += "\n";
                     }
                 }
+                
                 headerStr = headerStr.substring(0, headerStr.length() - 1);
                 linesStr = linesStr.substring(0, linesStr.length() - 1);
                 buttonresult = fc.showSaveDialog(frame);
@@ -137,15 +136,12 @@ public class ActionHandler implements ActionListener {
                 fw.close();
                 lfw.close();
             }
-            
-            
+                JOptionPane.showMessageDialog(frame, "Data saved successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(frame, e.getMessage(), "Error can't read file", JOptionPane.ERROR_MESSAGE);
-
         }
-                frame.Displayinvoices();
-
-
+        
+        frame.Displayinvoices();
     }
 
     private void Newinv() {
@@ -170,8 +166,7 @@ public class ActionHandler implements ActionListener {
             frame.getDatelabel().setText("");
 
         }
-                frame.Displayinvoices();
-
+        frame.Displayinvoices();
 
     }
 
@@ -192,12 +187,12 @@ public class ActionHandler implements ActionListener {
             frame.getInvoceHeaderTableModel().fireTableDataChanged();
             frame.getTableHeader().setRowSelectionInterval(_selectedinvoiceIndex, _selectedinvoiceIndex);
         }
-                frame.Displayinvoices();
+        frame.Displayinvoices();
 
-        
     }
 
     private void loadfile() {
+        JOptionPane.showMessageDialog(frame, "Please, select The Header File !", "Attension", JOptionPane.WARNING_MESSAGE);
         JFileChooser _fileChooser = new JFileChooser();
         try {
             int _result = _fileChooser.showOpenDialog(frame);
@@ -219,11 +214,11 @@ public class ActionHandler implements ActionListener {
                     invoiceHeader header = new invoiceHeader(_firstCode, _thirdItemCustomer, _dateInovice);
                     invoiceHeaders.add(header);
 
-                    System.out.println(_headerLine);                
+                    System.out.println(_headerLine);
                 }
 
-   
-                
+                JOptionPane.showMessageDialog(frame, "Please, select The Lines File!", "Attension", JOptionPane.WARNING_MESSAGE);
+
                 frame.setInvoiceArray(invoiceHeaders);
                 _result = _fileChooser.showOpenDialog(frame);
                 if (_result == JFileChooser.APPROVE_OPTION) {
@@ -255,15 +250,24 @@ public class ActionHandler implements ActionListener {
                 invoceHeaderTableModel _invoceHeaderTableModel = new invoceHeaderTableModel(invoiceHeaders);
                 frame.setInvoceHeaderTableModel(_invoceHeaderTableModel);
                 frame.getTableHeader().setModel(_invoceHeaderTableModel);
+                frame.getTableHeader().validate();
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(frame, e.getMessage(), "Error can't open file", JOptionPane.ERROR_MESSAGE);
-        } catch (ParseException ex) {
-            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error can't parse file", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        frame.Displayinvoices();
 
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Number Format Error\n" + ex.getMessage(), "Error NumberFormat", JOptionPane.ERROR_MESSAGE);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "File Error\n" + ex.getMessage(), "Error File Not Found", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Read Error\n" + e.getMessage(), "Error can't open file", JOptionPane.ERROR_MESSAGE);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Date Format Error\n" + e.getMessage(), "Error can't parse file", JOptionPane.ERROR_MESSAGE);
+        }
+
+        frame.Displayinvoices();
     }
 
     private void newInvODialogCancel() {
@@ -299,8 +303,8 @@ public class ActionHandler implements ActionListener {
         frame.getInvoceHeaderTableModel().fireTableDataChanged();
         headerDialog.dispose();
         headerDialog = null;
-        
-                frame.Displayinvoices();
+
+        frame.Displayinvoices();
 
     }
 
@@ -343,8 +347,8 @@ public class ActionHandler implements ActionListener {
         frame.getTableHeader().setRowSelectionInterval(selectedinvheader, selectedinvheader);
         lineDialog.dispose();
         lineDialog = null;
-        
-                frame.Displayinvoices();
+
+        frame.Displayinvoices();
 
     }
 
@@ -354,6 +358,4 @@ public class ActionHandler implements ActionListener {
         lineDialog = null;
     }
 
-    
-   
 }
